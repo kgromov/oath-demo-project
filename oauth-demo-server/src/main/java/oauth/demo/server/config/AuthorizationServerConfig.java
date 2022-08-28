@@ -11,6 +11,7 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.OAuth2AuthorizationServerConfiguration;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.OidcScopes;
 import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
@@ -30,15 +31,27 @@ public class AuthorizationServerConfig {
 
     @Bean
     public RegisteredClientRepository registeredClientRepository() {
+        RegisteredClient loginClient = RegisteredClient.withId(UUID.randomUUID().toString())
+                .clientId("login-client")
+                .clientSecret("{noop}secret")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("http://localhost:8080/login/oauth2/code/login-client")
+                .scope(OidcScopes.OPENID)
+                .build();
+
         RegisteredClient personClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("person-client")
                 .clientSecret("{noop}s3cr3t")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("http://localhost:8080/person-service/metrics")
+                .scope(OidcScopes.OPENID)
                 .scope("person.search")
                 .scope("person.metrics")
                 .build();
-        return new InMemoryRegisteredClientRepository(personClient);
+        return new InMemoryRegisteredClientRepository(loginClient, personClient);
     }
 
     @Bean

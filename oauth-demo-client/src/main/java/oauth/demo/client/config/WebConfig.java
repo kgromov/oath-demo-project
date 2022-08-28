@@ -13,6 +13,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 
 @Configuration
 public class WebConfig {
+
     @Bean
     WebClient webClient(OAuth2AuthorizedClientManager authorizedClientManager) {
         ServletOAuth2AuthorizedClientExchangeFilterFunction oauth2Client =
@@ -26,9 +27,9 @@ public class WebConfig {
     OAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
                                                           OAuth2AuthorizedClientRepository authorizedClientRepository) {
         OAuth2AuthorizedClientProvider authorizedClientProvider = OAuth2AuthorizedClientProviderBuilder.builder()
-                                                                                                        .authorizationCode()
-                                                                                                        .refreshToken()
-                                                                                                        .build();
+                .authorizationCode()
+                .refreshToken()
+                .build();
         DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(
                 clientRegistrationRepository, authorizedClientRepository);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);

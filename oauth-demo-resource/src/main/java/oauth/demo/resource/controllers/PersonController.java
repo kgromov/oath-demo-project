@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController
-@RequestMapping("person-service")
+@RequestMapping("/person-service")
 public class PersonController {
 
     @GetMapping("/address")

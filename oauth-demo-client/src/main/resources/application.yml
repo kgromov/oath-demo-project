@@ -1,0 +1,36 @@
+server:
+  port: 8080
+
+logging:
+  level:
+    root: INFO
+    org.springframework.web: INFO
+    org.springframework.security: INFO
+    org.springframework.security.oauth2: INFO
+
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          login-client:
+            provider: spring
+            client-id: login-client
+            client-secret: secret
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid
+          person-client:
+            provider: spring
+            client-id: person-client
+            client-secret: secret
+            redirect-uri: "{baseUrl}/person-service/metrics"
+            scope: openid, person.search, person.metrics
+        provider:
+          spring:
+            issuer-uri: http://auth-server:9000
+
+oauth2:
+  resource:
+    services:
+      service-a:
+        uri: http://localhost:8090/service-a

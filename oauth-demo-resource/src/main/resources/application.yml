@@ -1,0 +1,15 @@
+server:
+  port: 8090
+
+logging:
+  level:
+    root: INFO
+    org.springframework.security: TRACE
+    org.springframework.security.accees: INFO
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://auth-server:9000
