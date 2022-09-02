@@ -17,14 +17,14 @@ spring:
             provider: spring
             client-id: login-client
             client-secret: secret
-            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            redirect-uri: http://localhost:8080/login/oauth2/code/login-client
             scope: openid
           person-client:
             provider: spring
             client-id: person-client
-            client-secret: secret
-            redirect-uri: "{baseUrl}/person-service/metrics"
-            scope: openid, person.search, person.metrics
+            client-secret: s3cr3t
+            redirect-uri: http://localhost:8080/person-flow/address
+            scope: person:search, person:metrics
         provider:
           spring:
             issuer-uri: http://auth-server:9000
@@ -32,5 +32,5 @@ spring:
 oauth2:
   resource:
     services:
-      service-a:
-        uri: http://localhost:8090/service-a
+      person-service:
+        uri: http://localhost:8090/person-service/address

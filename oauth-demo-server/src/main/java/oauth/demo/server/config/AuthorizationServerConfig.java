@@ -17,6 +17,7 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.server.authorization.client.InMemoryRegisteredClientRepository;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClient;
 import org.springframework.security.oauth2.server.authorization.client.RegisteredClientRepository;
+import org.springframework.security.oauth2.server.authorization.config.ClientSettings;
 import org.springframework.security.oauth2.server.authorization.config.ProviderSettings;
 
 import java.security.KeyPair;
@@ -24,6 +25,8 @@ import java.security.KeyPairGenerator;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.UUID;
+
+import static org.springframework.security.oauth2.core.oidc.OidcScopes.OPENID;
 
 @EnableWebSecurity
 @Import(OAuth2AuthorizationServerConfiguration.class)
@@ -34,10 +37,10 @@ public class AuthorizationServerConfig {
         RegisteredClient loginClient = RegisteredClient.withId(UUID.randomUUID().toString())
                 .clientId("login-client")
                 .clientSecret("{noop}secret")
-                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .clientAuthenticationMethod(ClientAuthenticationMethod.BASIC)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .redirectUri("http://localhost:8080/login/oauth2/code/login-client")
-                .scope(OidcScopes.OPENID)
+                .scope(OPENID)
                 .build();
 
         RegisteredClient personClient = RegisteredClient.withId(UUID.randomUUID().toString())
@@ -46,11 +49,12 @@ public class AuthorizationServerConfig {
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
                 .authorizationGrantType(AuthorizationGrantType.CLIENT_CREDENTIALS)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .redirectUri("http://localhost:8080/person-service/metrics")
-                .scope(OidcScopes.OPENID)
-                .scope("person.search")
-                .scope("person.metrics")
+                .redirectUri("http://localhost:8080/person-flow/address")
+                .scope("person:search")
+                .scope("person:metrics")
+                .clientSettings(ClientSettings.builder().requireAuthorizationConsent(true).build())
                 .build();
+
         return new InMemoryRegisteredClientRepository(loginClient, personClient);
     }
 

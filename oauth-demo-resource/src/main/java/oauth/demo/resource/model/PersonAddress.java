@@ -12,7 +12,7 @@ import lombok.experimental.Delegate;
 @AllArgsConstructor
 @Builder
 public class PersonAddress {
-    /*private String country;
+    private String country;
     private String state;
     private String city;
     private String secondaryAddress;
@@ -23,7 +23,21 @@ public class PersonAddress {
     private String lastName;
     private String latitude;
     private String longitude;
-*/
-    @Delegate(types = Address.class)
-    private Address address;
+
+    public PersonAddress(Address address) {
+        this.country = address.country();
+        this.state = address.state();
+        this.city = address.city();
+        this.zipCode = address.zipCode();
+        this.streetName = address.streetName();
+        this.secondaryAddress = address.secondaryAddress();
+        this.fullAddress = address.fullAddress();
+        this.latitude = address.latitude();
+        this.longitude = address.longitude();
+        this.firstName = address.firstName();
+        this.lastName = address.lastName();
+    }
+
+    /*@Delegate(types = Address.class)
+    private Address address;*/
 }

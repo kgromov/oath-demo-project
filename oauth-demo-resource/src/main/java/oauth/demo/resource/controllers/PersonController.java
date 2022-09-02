@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class PersonController {
 
     @GetMapping("/address")
-    @PreAuthorize("hasAuthority(SCOPE_person.search)")
+    @PreAuthorize("hasAnyAuthority('person:search', 'SCOPE_person:search')")
     public PersonAddress getPersonAddress(JwtAuthenticationToken authenticationToken) {
         Faker faker = new Faker();
         Address address = faker.address();
@@ -27,7 +27,7 @@ public class PersonController {
     }
 
     @GetMapping("/metrics")
-    @PreAuthorize("hasAuthority(SCOPE_person.metrics)")
+    @PreAuthorize("hasAuthority('SCOPE_person:metrics')")
     public PersonMetrics getPersonMetrics(JwtAuthenticationToken authenticationToken) {
         Faker faker = new Faker();
         Demographic demographic = faker.demographic();

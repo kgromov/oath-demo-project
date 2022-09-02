@@ -20,8 +20,10 @@ public class ClientSecurityConfig {
                 .oauth2Login(oauth2Login ->
                         oauth2Login
                                 .loginPage("/oauth2/authorization/login-client")
-//                                .failureUrl("/login?error")
-                                .permitAll())
+                                .failureUrl("/login?error")
+                                .permitAll()
+                )
+                .logout(AbstractHttpConfigurer::disable)
                 .oauth2Client(withDefaults());
         return http.build();
     }
