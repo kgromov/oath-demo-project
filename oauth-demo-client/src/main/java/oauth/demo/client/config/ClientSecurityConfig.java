@@ -17,13 +17,9 @@ public class ClientSecurityConfig {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests.anyRequest().authenticated()
                 )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .loginPage("/oauth2/authorization/login-client")
-                                .failureUrl("/login?error")
-                                .permitAll()
-                )
-                .logout(AbstractHttpConfigurer::disable)
+                .csrf().disable()
+                .cors().disable()
+                .oauth2Login(withDefaults())
                 .oauth2Client(withDefaults());
         return http.build();
     }
